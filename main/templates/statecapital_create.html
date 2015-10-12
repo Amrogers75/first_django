@@ -1,0 +1,38 @@
+<h4>Create statecapital</h4>
+{{ request }}
+<br>
+<form action="/statecapital_city/" method="POST">
+{% csrf_token %}
+<lable for="name">Name:</lable>
+<input type="text" name="name" id="name">
+<br>
+
+<lable for="county">County:</lable>
+<input type="text" name="county" id="county">
+<br>
+
+<lable for="zip_code">zip_code:</lable>
+<input type="text" name="zip_code" id="zip_code">
+<br>
+
+<lable for="latitud">Latitude:</lable>
+<input type="text" name="latitud">
+<br>
+
+<lable for="longitude">Longittude:</lable>
+<input type="text" name="longitude" id="longitude">
+<br>
+
+<input type="submit" value="Create">
+
+<select name="state" id="state">
+<option value="">Slect A State</option>
+{% for state in states %}
+<option> value="{{state.pk}}"{{state.name}}</option>
+{% endfor %}
+
+</select>
+
+</form>
+
+{{ created }}

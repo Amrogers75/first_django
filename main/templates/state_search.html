@@ -1,0 +1,25 @@
+ 
+{% extends "base.html" %}
+{% load staticfiles %}
+
+
+
+
+<pre>
+Get: {{ request.GET }}
+<br>
+Post: {{ request.POST }}
+<br>
+
+
+<span>Search:</span>
+<from action="/state_search/" method="GET">
+{% csrf_token %}
+<input name="state" type="text">
+</from>
+
+{% for state in states %}
+<a href="/state_detail/{{state.pk}}">{{state.name}}</a>
+
+{% endfor %}
+<br>

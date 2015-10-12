@@ -1,0 +1,22 @@
+{% comment %}
+{% extends "base.html" %}
+{% load staticfiles %}
+{% endcomment %} 
+<pre>
+Get: {{ request.GET }}
+<br>
+Post: {{ request.POST }}
+<br>
+
+
+<span>Search:</span>
+<from action="/city_search/" method="GET">
+{% csrf_token %}
+<input name="city" type="text">
+</from>
+
+{% for city in cities %}
+<a href="/city_detail/{{city.pk}}">{{city.name}}</a>
+
+{% endfor %}
+<br>
