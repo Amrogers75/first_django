@@ -1,25 +1,105 @@
 from django.shortcuts import render, render_to_response
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from main.models import State, City, StateCapital
 from django.template import RequestContext
 from main.forms import ContactForm, CityEditForm
 from main.forms import StateCapitalEditForm
 from django.core.mail import send_mail
 from django.conf import settings
+from django.contrib.auth.models import User
 
 
+def api_city_list(request): 
+    cities = City.objects.all()
+    api_dict = {}
+    city_list = []
+    api_dict['cities'] = city_list
+
+    for city in cities:
+        try:
+            city_list.append({'name': city.name})
+        except:
+            pass
+
+    return JsonResponse(api_dict)
+
+
+def ajax_city_list(request):
+
+    context = {}
+
+    return render_to_response('ajax_city_list.html', context, context_instance=RequestContext(request))
+
+
+def api_state_list(request): 
+    states = State.objects.all().order_by('-votes')
+    api_dict = {}
+    state_list = []
+    api_dict['states'] = state_list
+
+    for state in states:
+        cities = state.city_set.all()[:30]
+        city_list = []
+
+    for state in states:
+        try:
+            state_list.append({'name': state.name,
+                                'abbrev': state.abbrev, 
+                                'map': state.state_map.url,
+                                # 'capital': state.capital,
+                                # 'votes': sate.votes,
+                                # 'pk': state.pk
+                                # 'cities': [city.name for city in state.city_set.all()[:30]],
+                                # 'cities': city_list
+                                })
+        except:
+            print state
+    return JsonResponse(api_dict)
+
+
+def ajax_state_list(request):
+
+    context = {}
+
+    return render_to_response('ajax_state_list.html', context, context_instance=RequestContext(request))
+
+
+def vote(request, pk):
+    vote_type = request.GET.get('vote_type', None)
+
+    user = User.objects.get(pk=request.user.pk)
+    userprofile = user.userprofile
+    state = State.objects.get(pk=pk)
+    state.upvotes.add(userprofile)
+
+    if vote_type == 'up':
+        if user in state.downvotes.all():
+            state.downvotes.remove(userprofile)
+            state.upvotes.add(userprofile)
+
+        state.upvotes.add(userprofile)  
+
+    if vote_type == 'down':
+        if userprofile in state.upvotes.all():
+            state.upvotes.remove(userprofile)
+            state.downvotes.add(userprofile)
+
+        state.downvotes.add(userprofile)
+
+    # return HttpResponse('UpVote: %s, DownVotes: %s' % (state.upvotes.all().count(), state.downvotes.all().count()))
+    return HttpResponseRedirect('/state_list/')
 
 
 def state_list(request):
 
     context = {}
     # text_string = "this is a string of text."
-    states = State.objects.all()
+    states = State.objects.all().order_by('-votes')
 
     context['states'] = states
 
     return render_to_response('state_list.html', context, context_instance=RequestContext(request))
-
+    
 
 def state_detail(request, pk):
 
@@ -42,7 +122,7 @@ def state_search(request):
 
     state = request.GET.get('state', None)
 
-    if state !=None:
+    if state != None:
         states = State.objects.filter(name__icontains=state)
     else:
         states = State.objects.all()
@@ -138,7 +218,6 @@ def city_edit(request, pk):
         form.save()
         return redirect('/state_list/')
 
-
     return render_to_response('city_edit.html', context, context_instance=RequestContext(request))
 
 
@@ -194,7 +273,6 @@ def contact_view(request):
         form = ContactForm()
         context['form'] = form
 
-
     return render_to_response('contact_view.html', context, context_instance=RequestContext(request))
 
 
@@ -249,7 +327,6 @@ def statecapital_edit(request, pk):
         form.save()
         return redirect('/state_list/')
 
-
     return render_to_response('statecapital_edit.html', context, context_instance=RequestContext(request))
 
 
@@ -262,3 +339,4 @@ def statecapital_list(request):
     context['statecapitals'] = statecapitals
 
     return render_to_response('statecapital_list.html', context, context_instance=RequestContext(request))
+

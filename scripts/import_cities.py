@@ -1,3 +1,8 @@
+
+"""
+git checkout origin/master -- scripts/scrape.py
+"""
+
 #!/usr/bin/env python
 
 import csv

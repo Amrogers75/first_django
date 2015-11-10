@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <title>Ajax State List</title>
+    </head>
+    <body>
+
+        <ul id='state-list'>
+            
+        </ul>
+
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.min.js'></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.js"></script>
+    {% verbatim %}
+    <script id="simple-template" type="text/x-handlebars-template">
+
+        {{#each states}}
+        <li>{{name}} - {{abbrev}} <img src="{{map}}" height="100" width="100"/></li>
+        {{/each}}
+    </script>
+    {% endverbatim %}
+
+    <script>
+    $(function() { 
+        console.log('stuff');
+
+        var stateList = $('#state-list');
+
+        var rawtemplate = $('#simple-template').html();
+
+        var template = Handlebars.compile(rawtemplate);
+
+        $.ajax({
+            type:'GET',
+            url:'/api_state_list/',
+            data:{},
+            success: function(data) { 
+                // console.log(data);
+
+                html_template = template(data)
+
+                stateList.html(html_template)
+
+            }
+        })
+    });
+    </script>
+    </body>
+</html>
+
+{# {{#if votes}}Scores: ( {{ votes }} ) {{else}} (0){{/if}}|<a href="/vote/ph/?vote_type=up"> Vote Up</a> - <a href="/vote/ph/?vote_type=down"> Vote Down</a> #}

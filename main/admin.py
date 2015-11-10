@@ -1,7 +1,7 @@
 from django.contrib import admin
-
+from django.contrib.auth.models import User
 # Register your models here.
-from main.models import State, StateCapital, City
+from main.models import State, StateCapital, City, UserProfile
 
 
 class StateAdmin(admin.ModelAdmin):
@@ -20,4 +20,4 @@ class CityAdmin(admin.ModelAdmin):
     search_fields = ['city']
 
 admin.site.register(City)
-
+admin.site.register(UserProfile)

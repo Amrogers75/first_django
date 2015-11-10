@@ -21,7 +21,7 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
 
 
-# url(pattern, viwe),
+# url(pattern, view),
     url(r'^state_list/$', 'main.views.state_list'),
     url(r'^state_detail/(?P<pk>\d+)/$', 'main.views.state_detail'),
     url(r'^state_search/$', 'main.views.state_search'),
@@ -39,8 +39,14 @@ urlpatterns = [
 
     url(r'^contact_view/$', 'main.views.contact_view'),
     
-    
-    
+    url(r'^vote/(?P<pk>\d+)/$', 'main.views.vote'),
+
+    url(r'^api_state_list/$', 'main.views.api_state_list'),
+    url(r'^ajax_state_list/$', 'main.views.ajax_state_list'),
+
+    url(r'^api_city_list/$', 'main.views.api_city_list'),
+    url(r'^ajax_city_list/$', 'main.views.ajax_city_list'),
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 

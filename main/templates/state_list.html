@@ -1,25 +1,18 @@
 {% extends "base.html" %}
 {% load staticfiles %}
-
 {% block body %}
     <div class="container">
         <div class="row">
             <div class="box">
-{% comment %}
-               <div class="col-lg-12">
-                    <hr>
-                    <h2 class="intro-text text-center">
-                         <strong>list</strong>
-                    </h2>
-                    <hr>
-                </div>
-{% endcomment %}
+
                 {% for state in states %}
                 <div class="col-lg-12 text-center">
                     {% comment %}
                     <img class="img-responsive img-border img-full" src="{% static 'img/slide-1.jpg' %}" alt="">
                     {% endcomment %}
                     <h2>{{ state.name }}
+                    <a href="/vote/{{ state.pk }}/?vote_type=up"> Vote UP ({{ state.upvotes.all.count }})</a>
+                    <a href="/vote/{{ state.pk }}/?vote_type=down"> Vote Down ({{ state.downvotes.all.count }})</a>
                         <br>
                         <small>{{ state.statecapital }}</small>
                     </h2>
@@ -30,7 +23,6 @@
                     </p>
                     <a href="/state_detail/{{ state.pk }}" class="btn btn-default btn-lg">Read More</a>
                     <hr>
-
 
                  </div>
                 {% endfor %}

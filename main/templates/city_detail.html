@@ -5,14 +5,14 @@
     <div class="container">
         <div class="row">
             <div class="col-md-6">
-               <a href="/city_list/"><h1>City: {{ city.name }}</h1></a>
+               <a href="/statecapital_list/"><h1>City: {{ city.name }}</h1></a>
             </div>
 
 <!-- Below is what is passed through the context -->
             <div class="row">
                  <div class="col-md-6">
                     {% if city.state %}
-                       <a href="/state_list/"><h2>State: {{ city.state }}</h2></a>
+                       <a href="/statecapital_list/"><h2>State: {{ city.state }}</h2></a>
                     {% endif %} 
                 </div>     
             </div>         
